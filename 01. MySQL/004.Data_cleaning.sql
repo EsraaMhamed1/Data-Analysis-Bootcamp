@@ -94,5 +94,65 @@ select *
 from layoffs_staging2 
 where rn > 1 ;
 
-------------------------------
- 
+----------------------------
+ -- 2. Standarized the Data 
+-- -------------------------
+select  company , trim(company)
+from layoffs_staging2 ; 
+
+select distinct industry 
+from layoffs_staging2; 
+
+
+-- trim (move spacing ) 
+-----------------------
+update layoffs_staging2 
+set comany = trim(company) ; 
+
+-- crypto or crypto... 
+----------------------
+select *  
+from layoffs_staging2 
+where industry like 'Crypto%' ; 
+
+SET SQL_SAFE_UPDATES = 0;
+update layoffs_staging2 
+set industry = 'Crypto' 
+where industry like 'Crypto%'; 
+SET SQL_SAFE_UPDATES = 1;
+
+select *
+from layoffs_staging2
+where country like 'United States%'
+order by 1;
+
+-- Advanced query 
+-----------------
+select distinct country , trim(trailing '.' from country)
+from layoffs_staging2 
+order by 1 ; 
+-----------
+
+SET SQL_SAFE_UPDATES = 0;
+update layoffs_staging2 
+set country = 'United States'
+where country like 'United States%' ; 
+SET SQL_SAFE_UPDATES = 1;
+
+-- working on dates 
+-------------------
+select `date`,
+str_to_date(`date`,'%m/%d/%Y')
+from layoffs_staging2;
+
+SET SQL_SAFE_UPDATES = 0 ; 
+update layoffs_staging2
+set  `date`= str_to_date(`date`,'%m/%d/%Y'); 
+SET SQL_SAFE_UPDATES = 1 ; 
+
+alter table layoffs_staging2 
+modify column `date` date; 
+
+select `date`
+from layoffs_staging2 ;
+
