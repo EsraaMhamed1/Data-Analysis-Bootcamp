@@ -156,3 +156,45 @@ modify column `date` date;
 select `date`
 from layoffs_staging2 ;
 
+-----------------------------------------
+-- 3. Remove Null values or blank values 
+-----------------------------------------
+
+select * 
+from layoffs_staging2
+where total_laid_off is null
+and percentage_laid_off is null;
+
+select * 
+from layoffs_staging2 
+where industry is null 
+or industry = '' ; 
+
+SET SQL_SAFE_UPDATES = 0 ; 
+update layoffs_staging2 
+set industry = null 
+where industry = '';
+SET SQL_SAFE_UPDATES = 1 ; 
+
+select *
+from layoffs_staging2 
+where company like 'Bally%';
+
+
+select t1.industry , t2.industry 
+from layoffs_staging2 t1 
+join layoffs_staging2 t2 
+on t1.company = t2.company  
+where (t1.industry is null or t1.industry = '')
+and t2.industry is not null ; 
+
+SET SQL_SAFE_UPDATES = 0 ; 
+update layoffs_staging2 t1
+join layoffs_staging2 t2 
+on t1.company = t2.company 
+set t1.industry = t2.industry 
+where (t1.industry is null or '')
+and t2.industry is not null ; 
+SET SQL_SAFE_UPDATES = 1 ; 
+
+
