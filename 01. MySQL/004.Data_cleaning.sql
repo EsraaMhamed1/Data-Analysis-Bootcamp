@@ -197,4 +197,22 @@ where (t1.industry is null or '')
 and t2.industry is not null ; 
 SET SQL_SAFE_UPDATES = 1 ; 
 
+--------------------------------
+-- 4. Remove any columns or Rows 
+--------------------------------
 
+select * 
+from layoffs_staging2; 
+
+SET SQL_SAFE_UPDATES = 0;
+delete 
+from layoffs_staging2 
+where total_laid_off is null 
+and percentage_laid_off is null ; 
+SET SQL_SAFE_UPDATES = 1;
+
+alter table layoffs_staging2 
+drop column rn ; 
+
+select * 
+from layoffs_staging2; 
