@@ -45,6 +45,35 @@ group by stage
 order by 1 desc;
 
 
+select substring(`date`,1,7) as 'Month' , sum(total_laid_off)
+from layoffs_staging2
+where substring(`date`,1,7) is not NULL 
+group by Month
+order by Month; 
+
+
+select month(`date`) as 'Month'
+from layoffs_staging2;
+
+
+select * 
+from layoffs_staging2 ; 
+
+
+with Rolling_Total as 
+(
+select substring(`date`,1,7) as 'Month' ,
+ sum(total_laid_off) as total_off
+from layoffs_staging2
+where substring(`date`,1,7) is not NULL 
+group by Month
+order by 1 asc
+)
+select `Month`, total_off,
+sum(total_off) over(order by 'Month') as Rolling_Total
+from Rolling_Total ; 
+
+
 
 
 
